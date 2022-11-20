@@ -1,0 +1,19 @@
+{
+  "name": "next-css-scaffold",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^18.11.9",
+    "@types/yargs": "^17.0.13",
+    "tsx": "^3.12.1",
+    "typescript": "^4.9.3"
+  }
+}
