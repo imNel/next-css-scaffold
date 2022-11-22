@@ -40,6 +40,7 @@ options:
 const reactPrefix = 'components/'
 const cssPrefix = 'assets/modules/'
 
+// Scaffold helper functions
 function filesExist(): boolean {
   try {
     if (readFileSync(`${reactPrefix}${args[0]}.tsx`).toString()) return true;
@@ -49,11 +50,11 @@ function filesExist(): boolean {
   } catch {}
   return false;
 }
-
 const isCapitalised = (name: string): boolean => /^[A-Z]/g.test(name);
+const isSrcDir = (): string => existsSync('src') ? 'src/' : ''
 
+// Probably wanna break this function up since its gonna keep growning
 function scaffold():void {
-  console.log(existsSync('src'))
   if (!isCapitalised(args[0])) {
     console.log("React components must start with a capital letter")
     return
@@ -62,8 +63,8 @@ function scaffold():void {
     console.log("found files! please delete them to continue")
     return
   }
-  outputFileSync(`${reactPrefix}${args[0]}.tsx`, functionComponent(args[0], cssExtension))
-  outputFileSync(`${cssPrefix}${args[0]}.module.${cssExtension}`, '')
+  outputFileSync(`${isSrcDir()}${reactPrefix}${args[0]}.tsx`, functionComponent(args[0], cssExtension))
+  outputFileSync(`${isSrcDir()}${cssPrefix}${args[0]}.module.${cssExtension}`, '')
 }
 
 main();
