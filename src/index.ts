@@ -7,13 +7,14 @@
 // less support
 // prefers using src/ - if a pages, assets, components (etc) file is found, use root otherwise use the better thing ;)
 
-import { readFileSync, writeFileSync } from "fs";
+import { readFileSync } from "fs";
+import { outputFileSync } from 'fs-extra';
 import { functionComponent } from "./templates";
 
 const args = process.argv.slice(2);
 const cssExtension = "css";
 
-const main = () => {
+const main = ():void => {
   if (args[0]) {
     switch (args[0]) {
       case "help":
@@ -28,7 +29,7 @@ const main = () => {
   }
 };
 
-const help = `ncs [path/to/component] [options]
+const help:string = `ncs [path/to/component] [options]
 
 options:
   --sass: Uses sass instead css
@@ -38,23 +39,32 @@ options:
   --js (-js): Uses JavaScript instead of TypeScript 
 `;
 
+const reactPrefix = 'components/'
+const cssPrefix = 'assets/modules/'
+
 function filesExist(): boolean {
   try {
-    if (readFileSync(`${args[0]}.tsx`).toString()) return true;
+    if (readFileSync(`${reactPrefix}${args[0]}.tsx`).toString()) return true;
   } catch {}
   try {
-    if (readFileSync(`${args[0]}.module.${cssExtension}`).toString()) return true;
+    if (readFileSync(`${cssPrefix}${args[0]}.module.${cssExtension}`).toString()) return true;
   } catch {}
   return false;
 }
 
-function scaffold() {
+const isCapitalised = (name: string): boolean => /^[A-Z]/g.test(name);
+
+function scaffold():void {
+  if (!isCapitalised(args[0])) {
+    console.log("React components must start with a capital letter")
+    return
+  }
   if (filesExist()) {
     console.log("found files! please delete them to continue")
     return
   }
-  writeFileSync(`${args[0]}.tsx`, functionComponent(args[0], cssExtension))
-  writeFileSync(`${args[0]}.module.${cssExtension}`, functionComponent(args[0], ''))
+  outputFileSync(`${reactPrefix}${args[0]}.tsx`, functionComponent(args[0], cssExtension))
+  outputFileSync(`${cssPrefix}${args[0]}.module.${cssExtension}`, '')
 }
 
 main();
