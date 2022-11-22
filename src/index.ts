@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 // TODO
 // auto @use variables.scss (auto sass @use support basically)
 // support things other than scss
@@ -7,7 +5,7 @@
 // less support
 // prefers using src/ - if a pages, assets, components (etc) file is found, use root otherwise use the better thing ;)
 
-import { readFileSync } from "fs";
+import { existsSync, readFileSync } from "fs";
 import { outputFileSync } from 'fs-extra';
 import { functionComponent } from "./templates";
 
@@ -55,6 +53,7 @@ function filesExist(): boolean {
 const isCapitalised = (name: string): boolean => /^[A-Z]/g.test(name);
 
 function scaffold():void {
+  console.log(existsSync('src'))
   if (!isCapitalised(args[0])) {
     console.log("React components must start with a capital letter")
     return
