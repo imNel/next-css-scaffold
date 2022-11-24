@@ -1,6 +1,6 @@
 import { existsSync } from "fs";
 
-const options = process.argv.slice(3);
+import { options } from "./args";
 
 /** User specified --src. Used to force scaffold to src folder */
 export const src = existsSync("src") || options.includes("--src");
