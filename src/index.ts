@@ -1,69 +1,71 @@
-// TODO
-// auto @use variables.scss (auto sass @use support basically)
-// support things other than scss
-// things in the help file
-// less support
+#! /usr/bin/env node
 
-import { existsSync, readFileSync } from "fs";
-import { outputFileSync } from 'fs-extra';
+import { readFileSync } from "fs";
+import { outputFileSync } from "fs-extra";
 import * as options from "./options";
-import { functionComponent } from "./templates";
+import { constComponent, functionComponent } from "./templates";
 
-const component = process.argv.slice(2,3)[0];
+const component = process.argv.slice(2, 3)[0];
 
-const main = ():void => {
+const main = (): void => {
   if (component) {
-    switch (component) {
-      case "help":
-        console.log(help);
-        break;
-      default:
-        scaffold();
-        break;
-    }
+    scaffold();
   } else {
     console.log(help);
   }
 };
 
-const help:string = `ncs [path/to/component] [options]
+const help: string = `ncs [path/to/component] [options]
 
 options:
+  CSS Preprocessors:
   --sass: Uses sass instead css
   --scss: Uses scss instead css
-  --less: Uses less instead css
-  --const (-c): Uses const instead of function
-  --js (-js): Uses JavaScript instead of TypeScript 
+
+  --src: Adds files to src/ instead of root (autodetected if you already have a src/ folder)
+  --const: Uses const instead of function
 `;
 
-const reactPrefix = 'components/'
-const cssPrefix = 'assets/modules/'
+const reactPrefix = "components/";
+const cssPrefix = "assets/modules/";
 
 // Scaffold helper functions
 function filesExist(): boolean {
+  const srcPrefix = options.src ? "src/" : "";
   try {
-    if (readFileSync(`${reactPrefix}${component}.tsx`).toString()) return true;
+    if (readFileSync(`${srcPrefix}${reactPrefix}${component}.tsx`).toString()) return true;
   } catch {}
   try {
-    if (readFileSync(`${cssPrefix}${component}.module.${options.cssPreprocessor}`).toString()) return true;
+    if (
+      readFileSync(
+        `${srcPrefix}${cssPrefix}${component}.module.${options.cssPreprocessor}`
+      ).toString()
+    )
+      return true;
   } catch {}
   return false;
 }
 const isCapitalised = (name: string): boolean => /^[A-Z]/g.test(name);
-const isSrcDir = (): string => existsSync('src') || options.src ? 'src/' : ''
+const isSrcDir = (): string => (options.src ? "src/" : "");
 
 // Probably wanna break this function up since its gonna keep growning
-function scaffold():void {
+function scaffold(): void {
   if (!isCapitalised(component)) {
-    console.log("React components must start with a capital letter")
-    return
+    console.log("React components must start with a capital letter");
+    return;
   }
   if (filesExist()) {
-    console.log("found files! please delete them to continue")
-    return
+    console.log("found files! please delete them to continue");
+    return;
   }
-  outputFileSync(`${isSrcDir()}${reactPrefix}${component}.tsx`, functionComponent(component, options.cssPreprocessor))
-  outputFileSync(`${isSrcDir()}${cssPrefix}${component}.module.${options.cssPreprocessor}`, '')
+  outputFileSync(
+    `${isSrcDir()}${reactPrefix}${component}.tsx`,
+    options.useConst ? constComponent(component) : functionComponent(component)
+  );
+  outputFileSync(
+    `${isSrcDir()}${cssPrefix}${component}.module.${options.cssPreprocessor}`,
+    ""
+  );
 }
 
 main();
