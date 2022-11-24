@@ -28,3 +28,6 @@ export default function Component() {
 - better handling of arguments
 - custom headers for scss files
 - CI/CD for updating package in npm
+- restrict name to react component naming conventions
+- Use typescript paths instead of relative paths in generation
+- remove js support (boohoo)
