@@ -7,10 +7,11 @@ const reactPrefix = "components/";
 const cssPrefix = "assets/modules/";
 
 // Scaffold helper functions
-function filesExist(component:string): boolean {
+function filesExist(component: string): boolean {
   const srcPrefix = options.src ? "src/" : "";
   try {
-    if (readFileSync(`${srcPrefix}${reactPrefix}${component}.tsx`).toString()) return true;
+    if (readFileSync(`${srcPrefix}${reactPrefix}${component}.tsx`).toString())
+      return true;
   } catch {}
   try {
     if (
@@ -22,11 +23,13 @@ function filesExist(component:string): boolean {
   } catch {}
   return false;
 }
-const isCapitalised = (name: string): boolean => /^[A-Z]/g.test(name);
+const isCapitalised = (name: string): boolean => {
+  const splitName = name.split("/");
+  return /^[A-Z]/g.test(splitName[splitName.length - 1]);
+};
 const isSrcDir = (): string => (options.src ? "src/" : "");
 
-// Probably wanna break this function up since its gonna keep growning
-export default function scaffold(component:string): void {
+export default function scaffold(component: string): void {
   if (!isCapitalised(component)) {
     console.log("React components must start with a capital letter");
     return;
@@ -42,5 +45,8 @@ export default function scaffold(component:string): void {
   outputFileSync(
     `${isSrcDir()}${cssPrefix}${component}.module.${options.cssPreprocessor}`,
     ""
+  );
+  console.log(
+    `Successfully saffolded component and ${options.cssPreprocessor} file`
   );
 }
