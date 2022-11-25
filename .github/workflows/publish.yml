@@ -4,10 +4,20 @@ on:
     types: [created]
 jobs:
   build:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name:  'Automated Version Bump'
+        uses:  'phips28/gh-action-bump-version@master'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          major-wording: 'MAJOR,Major,major'
+          minor-wording: 'MINOR, Minor, minor'
+          patch-wording: 'patch,fixes'
       - name: Setup Node
         uses: actions/setup-node@v2
         with:
