@@ -73,9 +73,7 @@ cd [your project]
 ncs MyComponent
 ```
 
-## Todo (a lot):
+## Todo:
 
-- React naming conventions with subfolders
 - NextJS Project detection/validation
 - Make CLI look better
-- CI/CD for updating package in npm
