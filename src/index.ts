@@ -19,7 +19,7 @@ options:
   --scss: Uses scss instead css
 
   --src: Adds files to src/ instead of root (autodetected if you already have a src/ folder)
-  --const: Uses const instead of function
+  --const: Uses const instead of function for react components
 `;
 
 main();
